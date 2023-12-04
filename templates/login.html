@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <span class="flash block mb-5 px-7 py-2 text-center w-fit mx-auto {% if category == 'error' %}  bg-red-200 text-red-800 {% else %} bg-green-200 text-green-800 {% endif %}rounded-lg text-lg font-bold ">{{ message }}</span>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<h1 class="text-center text-3xl">Login Form</h1>
+<div class="mt-5">
+    <form action="" method="POST" enctype="multipart/form-data" class="register-form w-3/4 lg:w-1/2 ms-auto me-auto">
+        {{form.hidden_tag()}}
+        <div class="item mb-5">
+            <label for="name" class="model-name mb-3 block">User Name:</label>
+            {{form.name}}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <span id="error-message" class="error-message block mb-3 mt-2">{{ error['name'] }}</span>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="item mb-5">
+            <label for="email" class="model-name mb-3 block">User Email:</label>
+            {{form.email}}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <span id="error-message" class="error-message block mb-3 mt-2">{{ error['email'] }}</span>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="item mb-5">
+            <label for="password" class="model-name mb-3 block">User Pasword:</label>
+            {{form.password}}
+            {% if pass_error%}
+                <span id="error-message" class="error-message block mb-3 mt-2">{{ pass_error }}</span>
+            {% endif %}
+            <!-- <span id="error-message" class="error-message block mb-3 mt-2">{{ pass_error }}</span> -->
+        </div>
+
+        <div class="item mb-3">
+            {{form.submit}}
+        </div>
+
+    </form>
+
+    <a href="/register" class="underline text-sky-600 block text-center">Don't have account?</a>
+
+</div>
+
+{% endblock %}

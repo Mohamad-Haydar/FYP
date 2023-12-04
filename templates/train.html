@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Train Page{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center text-3xl">Train Page</h1>
+
+<label for="certificate_text" class="model-name mb-3 block text-xl">Input your text:</label>
+<div class="grid grid-cols-1 sm:grid-cols-2a gap-7 relative">
+    <div class="trian">
+        <div class="border rounded border-indigo-800 focus:outline-none p-5 w-full overflow-y-scroll max-h-80" name="certificate_text" id="certificate_text" id="certificate_text" contenteditable="true"></div>
+        <button id="send_labels" class="m-2 mt-4 file-label w-fit h-fit hover:bg-indigo-950 duration-150">Send</button>
+    </div>
+    <div class="w-full flex flex-wrap content-start h-fit sticky top-5">
+        <button id="btn-1" data-label="PV modul name" class="m-2 file-label w-fit h-fit hover:bg-indigo-950 duration-150 btn-label">PV model name</button>
+        <button id="btn-2" data-label="PV Range" class="m-2 file-label w-fit h-fit hover:bg-indigo-950 duration-150 btn-label">PV range</button>
+        <button id="btn-3" data-label="Inverter model name" class="m-2 file-label w-fit h-fit hover:bg-indigo-950 duration-150 btn-label">Inverter model name</button>
+        <button id="btn-4" data-label="Inverter range" class="m-2 file-label w-fit h-fit hover:bg-indigo-950 duration-150 btn-label">Inverter range</button>
+        <button id="btn-5" data-label="Tested According to" class="m-2 file-label w-fit h-fit hover:bg-indigo-950 duration-150 btn-label">Tested According to</button>
+    </div>
+</div>
+
+
+
+{% endblock %}

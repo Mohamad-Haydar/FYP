@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='dist/output.css')}}" type="text/css">
+
+</head>
+<body>
+
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-16 items-center justify-between">
+                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                    <!-- Mobile menu button-->
+                    <button type="button" id="dropdownBtn" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="flex flex-shrink-0 items-center">
+                        <!-- <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                        <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
+                        <span class="block h-8 w-auto lg:hidden text-white">NLP</span>
+                        <span class="hidden h-8 w-auto lg:block text-white">NLP</span>
+                    </div>
+                    <div class="hidden sm:ml-auto sm:block">
+                        <div class="flex space-x-4">
+                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                            <a href="/" class="text-gray-300 {% if current_route == '/' %}bg-gray-900 text-white {% endif %} hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
+                            <a href="/train" class="text-gray-300 {% if current_route == '/train' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Train</a>
+                            <a href="/about" class="text-gray-300 {% if current_route == '/about' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">About</a>
+                            {% if  current_user.name %}
+                                <a href="/logout" class="text-gray-300 {% if current_route == '/logout' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Logout</a>
+                                <span id="account_access" class="text-white bg-cyan-950 hover:bg-gray-700 hover:text-white font-bold rounded-full px-3 py-2 text-sm text-lg cursor-pointer">{{current_user.name[0].upper()}}</span>
+                            {% else %}
+                                <a href="/login" class="text-gray-300 {% if current_route == '/login' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Login</a>
+                            {% endif %}
+                        </div>  
+                    </div>
+                </div>
+                {% if  current_user.name %}
+                    <span id="account_access" class="text-white bg-cyan-950 hover:bg-gray-700 hover:text-white font-bold rounded-full px-3 py-2 text-sm text-lg cursor-pointer absolute right-0 sm:hidden h-fit ">{{current_user.name[0].upper()}}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="opacity-0 scale-95 h-0 hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pb-3 pt-2">
+                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                <a href="/" class="text-gray-300 {% if current_route == '/' %}bg-gray-900 text-white {% endif %} block rounded-md hover:bg-gray-700 hover:text-white px-3 py-2 text-base font-medium" aria-current="page">Home</a>
+                <a href="/train" class="text-gray-300 {% if current_route == '/train' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Train</a>
+                <a href="/about" class="text-gray-300 {% if current_route == '/about' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">About</a>
+                {% if  current_user.name %}
+                    <a href="/logout" class="text-gray-300 {% if current_route == '/logout' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 block hover:text-white rounded-md px-3 py-2 text-sm font-medium">Logout</a>
+                    <!-- <span id="account_access" class="text-white bg-cyan-950 hover:bg-gray-700 hover:text-white font-bold rounded-full px-3 py-2 text-sm text-lg leading-none cursor-pointer">{{current_user.name[0].upper()}}</span> -->
+                {% else %}
+                    <a href="/login" class="text-gray-300 {% if current_route == '/login' %}bg-gray-900 text-white{% endif %} hover:bg-gray-700 block hover:text-white rounded-md px-3 py-2 text-sm font-medium">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container px-6 mt-12 sm:mt-16 mx-auto" id="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{url_for('static', filename='script/main.js')}}"></script>
+    <script src="https://kit.fontawesome.com/f58d9e2e59.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

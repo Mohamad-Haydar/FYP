@@ -1,0 +1,16 @@
+spacy
+pandas
+PyPDF2
+flask
+Werkzeug
+pyocr
+Flask-WTF
+pdf2image
+pytesseract
+celery
+Flask-SQLAlchemy
+pymysql
+flask-login
+flask_bcrypt
+Flask-Mail
+pywebview

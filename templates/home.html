@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<span
+    class="flash block mb-5 px-7 py-2 text-center w-fit mx-auto {% if category == 'error' %}  bg-red-200 text-red-800 {% else %} bg-green-200 text-green-800 {% endif %}rounded-lg text-lg font-bold ">{{
+    message }}</span>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<h1 class="text-center text-3xl">Upload a PDF File</h1>
+<div class="mt-5">
+    <form action="/process" id="my-form" method="POST" onsubmit="validateForm(event)" enctype="multipart/form-data"
+        class="check-form px-6 sm:w-96 sm:px-0 ms-auto me-auto">
+        <div class="item mb-5">
+            <label for="my-file-input" class="file-label w-full mb-3 block">
+                Choose Zip Folder
+                <i class="fa-solid fa-file-circle-question" id="selected-file-icon"></i>
+            </label>
+            <input type="file" id="my-file-input" class="file-input" name="certificate"
+                onchange="showSelectedFileIcon()">
+        </div>
+
+        <div class="item mb-5">
+            <label for="options" class="model-name mb-3 block">Type:</label>
+            <select id="options" name="type" class="select">
+                <option value="PV">PV</option>
+                <option value="Inverter">Inverter</option>
+            </select>
+        </div>
+
+        <div class="item mb-5">
+            <label for="model_name" class="model-name mb-3 block">Model Name:</label>
+            <input type="text" class="my-input" name="model_name" id="model_name" />
+            <span id="error-message" class="error-message pt-3 block"></span>
+        </div>
+
+        <!-- <div class="item mb-5">
+            <label for="manufacturer" class="model-name mb-3 block">Manufacturer:</label>
+            <input type="text" class="my-input" name="manufacturer" id="manufacturer" />
+            <span id="error-message" class="error-message pt-3 block"></span>
+        </div> -->
+
+        <div class="item mb-3">
+            <input type="submit" value="Process" class="file-label w-full" id="submit_form">
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

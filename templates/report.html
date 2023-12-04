@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- <div style="max-width: 1100px; margin: 30px auto;">
+        <div style="display: flex; align-items: center;direction: ltr;">
+            <label style="font-weight: bold; font-size: 30px; line-height: 1;" for="data">Result: </label>
+            <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{data}}</p>
+        </div>
+    
+        {% if user_input %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 30px; line-height: 1;" for="model">Model Name: </label>
+                <p style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;" id="model">{{user_input}}</p>
+            </div>
+        {% endif %}
+
+        <div style="display: flex; align-items: center;direction: ltr;">
+            <div style="display:inline-block; font-size: 20px; margin: 0;" id="model">
+                {% if ceritificate_test == "0" %}
+                    It is found in the certifivcate that the Model name {{user_input}} is {{data}} with the folowing model in the certificate: {{model}} where the range is {{range}}
+                    And the tests applied in the ceritificate are the following:
+                    {% for test in tested %}
+                        {% if tested[test] %}
+                            <div style="display: flex; align-items: center;direction: ltr;">
+                                <label for="manufactor">{{test}}:</label>
+                                    {% for item in tested[test] %}
+                                        <p style="display:inline-block; font-size: 20px; margin: 0 10px;" id="manufactor">{{item}}</p>
+                                    {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% elif ceritificate_test == "2" %}
+                    It is found in the certifivcate that the Model name {{user_input}} is found in the certificate but it is {{data}} because it mess the following test:
+                    {% if "mess" in tested %}
+                        <div style="display: flex; align-items: center;direction: ltr;">
+                            <label for="manufactor">Mess:</label>
+                                {% for item in tested[1:] %}
+                                    <span style="display:inline-block; font-size: 20px; margin: 0 10px;" id="manufactor">{{item}}</span>
+                                {% endfor %}
+                        </div>
+                    {% endif %}
+                {% elif ceritificate_test == "1" %}
+                    It is found in the certifivcate that the Model name {{user_input}} is {{data}}
+                    And the tests applied in the ceritificate are the following:
+                    {% for test in tested %}
+                        {% if tested[test] %}
+                            <div style="display: flex; align-items: center;direction: ltr;">
+                                <label for="manufactor">{{test}}:</label>
+                                    {% for item in tested[test] %}
+                                        <span style="display:inline-block; font-size: 20px; margin: 0 10px;" id="manufactor">{{item}}</span>
+                                    {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                
+            </div>
+        </div>
+        <br><hr style="border: 0.5px solid #000;"><br>
+    </div> -->
+
+<div style="max-width: 1100px; margin: 23px auto;"> 
+
+    {% for key in result %}
+        <div style="display: flex; align-items: center;direction: ltr;">
+            <label style="font-weight: bold; font-size: 23px;" for="data">Compatibility from File: </label>
+            <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{ result[key]["file_name"] }}</p>
+        </div>
+
+        {% if result[key]['data'] == 'compatible' %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Result: </label>
+                <p id="data" style="display:inline-block;color: green; font-size: 20px; margin: 0 0 0 10px; line-height: 1.5; ">{{result[key]["data"]}}</p>
+            </div>
+        {% else %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Result: </label>
+                <p id="data" style="display:inline-block; color: red; font-size: 20px; margin: 0 0 0 10px; line-height: 1.5; ">{{result[key]["data"]}}</p>
+            </div>
+        {% endif %}
+        
+
+        {% if result[key]["user_input"] %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Item To check: </label>
+                <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{result[key]["user_input"]}}</p>
+            </div>
+        {% endif %}
+
+        {% if result[key]["model"] %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Model Name: </label>
+                <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{result[key]["model"]}}</p>
+            </div>
+        {% endif %}
+
+        {% if result[key]["range"] %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Range: </label>
+                <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{result[key]["range"]}}</p>
+            </div>
+        {% endif %}
+
+        {% if result[key]["manufactor"] != "" %}
+            <div style="display: flex; align-items: center;direction: ltr;">
+                <label style="font-weight: bold; font-size: 23px;" for="data">Manufacturer: </label>
+                <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{result[key]["manufactor"]}}</p>
+            </div>
+        {% endif %}
+
+        <div class="more-detail more-detail">
+            {% if result[key]["tested"]  %}
+                {% for test in  result[key]["tested"] %}
+                    {% if result[key]["summary"][test] > 0 %}
+                    <div style="display: flex; align-items: center;direction: ltr;">
+                        <label style="font-weight: bold; font-size: 23px;" for="data">{{test}}: </label>
+                        {% for single_test in result[key]["tested"][test] %}
+                            <p id="data" style="display:inline-block; font-size: 20px;  margin: 0 0 0 10px; line-height: 1.5;">{{single_test}}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <br>
+        <hr>
+        <br>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

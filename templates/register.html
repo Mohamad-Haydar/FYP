@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Register Page{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center text-3xl">Register Form</h1>
+<div class="mt-5">
+    <form action="" method="POST" enctype="multipart/form-data" class="w-3/4 register-form ms-auto me-auto">
+        {{form.hidden_tag()}}
+        <div class="item mb-5">
+            <label for="name" class="model-name mb-3 block">User Name:</label>
+            {{form.name}}
+        </div>
+
+        <div class="item mb-5">
+            <label for="password" class="model-name mb-3 block">User Email:</label>
+            {{form.email}}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <span id="error-message" class="error-message block mb-3 mt-2">{{ error['email'] }}</span>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="item mb-5">
+            <label for="password" class="model-name mb-3 block">Password:</label>
+            {{form.password}}
+        </div>
+
+        <div class="item mb-3">
+            {{form.submit}}
+        </div>
+
+    </form>
+
+    <a href="/login" class="underline text-sky-600 block text-center">Already have an account?</a>
+
+</div>
+
+{% endblock %}

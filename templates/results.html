@@ -7,10 +7,11 @@
 {% for key in result %}
 
 {% if result[key]["manufactor"] == "SGS" %}
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <p id="data" class="inline-block text-1xl font-bold mb-0 ms-3 text-red-600">Remark: </p>
-        <p id="data" class="inline-block font-normal mb-0 ms-3">This file is an SGS file to you might need to sheck the file manualy presize info</p>
-    </div>
+<div class="mb-2 font-bold d-flex align-items-center">
+    <p id="data" class="inline-block text-1xl font-bold mb-0 ms-3 text-red-600">Remark: </p>
+    <p id="data" class="inline-block font-normal mb-0 ms-3">This file is an SGS file to you might need to sheck the file
+        manualy presize info</p>
+</div>
 {% endif %}
 
 <div class="mb-2 font-bold d-flex align-items-center">
@@ -18,78 +19,88 @@
     <p id="data" class="inline-block font-normal mb-0 ms-3">{{result[key]["file_name"]}}</p>
 </div>
 
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <label class="text-1xl" for="data">Result: </label>
-        <p id="data" class="inline-block font-normal {% if result[key]['data'] == 'compatible' %}text-lime-600{% else %}text-red-600{% endif %} mb-0 ms-3">{{result[key]["data"]}}</p>
-    </div>
+<div class="mb-2 font-bold d-flex align-items-center">
+    <label class="text-1xl" for="data">Result: </label>
+    <p id="data"
+        class="inline-block font-normal {% if result[key]['data'] == 'compatible' %}text-lime-600{% else %}text-red-600{% endif %} mb-0 ms-3">
+        {{result[key]["data"]}}</p>
+</div>
 
-    {% if result[key]["user_input"] %}
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <label class="text-1xl" for="model">Your Input: </label>
-        <p id="model" class="inline-block font-normal mb-0 ms-3">{{result[key]["user_input"]}}</p>
-    </div>
-    {% endif %}
+{% if result[key]["user_input"] %}
+<div class="mb-2 font-bold d-flex align-items-center">
+    <label class="text-1xl" for="model">Your Input: </label>
+    <p id="model" class="inline-block font-normal mb-0 ms-3">{{result[key]["user_input"]}}</p>
+</div>
+{% endif %}
 
-    {% if result[key]["model"] %}
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <label class="text-1xl" for="model">Model Name: </label>
-        <p id="model" class="inline-block font-normal mb-0 ms-3">{{result[key]["model"]}}</p>
-    </div>
-    {% endif %}
+{% if result[key]["model"] %}
+<div class="mb-2 font-bold d-flex align-items-center">
+    <label class="text-1xl" for="model">Model Name: </label>
+    <p id="model" class="inline-block font-normal mb-0 ms-3">{{result[key]["model"]}}</p>
+</div>
+{% endif %}
 
-    {% if result[key]["range"] %}
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <label class="text-1xl" for="range">Range: </label>
-        <p id="range" class="inline-block font-normal mb-0 ms-3">{{result[key]["range"]}}</p>
-    </div>
-    {% endif %}
+{% if result[key]["range"] %}
+<div class="mb-2 font-bold d-flex align-items-center">
+    <label class="text-1xl" for="range">Range: </label>
+    <p id="range" class="inline-block font-normal mb-0 ms-3">{{result[key]["range"]}}</p>
+</div>
+{% endif %}
 
-    {% if result[key]["manufactor"] != "" %}
-    <div class="mb-2 font-bold d-flex align-items-center">
-        <label class="text-1xl" for="manufactor">Manufacturer: </label>
-        <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{result[key]["manufactor"]}}</p>
-    </div>
+{% if result[key]["manufactor"] != "" %}
+<div class="mb-2 font-bold d-flex align-items-center">
+    <label class="text-1xl" for="manufactor">Manufacturer: </label>
+    <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{result[key]["manufactor"]}}</p>
+</div>
+{% endif %}
+<!-- one for summary -->
+{% if result[key]["summary"] %}
+<div class="mb-2 font-bold d-flex align-items-center">
+    {% if count > 0 %}
+    <label class="text-1xl" for="manufactor">Tests in This Certificate:</label>
+    {% for test in result[key]["summary"] %}
+    {% if result[key]["summary"][test] > 0 %}
+    <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{test}}</p>
     {% endif %}
-    <!-- one for summary -->
-    {% if result[key]["summary"]  %}
-        <div class="mb-2 font-bold d-flex align-items-center">
-            <label class="text-1xl" for="manufactor">Tests in This Certificate:</label>
-                {% for test in result[key]["summary"] %}
-                    {% if result[key]["summary"][test] > 0 %} 
-                        <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{test}}</p>
-                    {% endif %}
-                {% endfor %}
-        </div> 
+    {% endfor %}
+    {% else %}
+    <p id="manufactor" class="inline-block font-normal mb-0 ms-3  text-red-600">Sorry, we didn't find test in this
+        certificate.</p>
     {% endif %}
-    <button class="file-label w-36 mb-3 mt-3 see-more-detail" data-number="{{key}}" id="see-more-detail{{key}}">See More Detail</button>
-    <!-- this part open when click on see more detail and close when click seconde time -->
-    <!-- TODO: this part will contain the tests detail and the text of the certificate with 
+</div>
+{% endif %}
+<button class="file-label w-36 mb-3 mt-3 see-more-detail" data-number="{{key}}" id="see-more-detail{{key}}">See More
+    Detail</button>
+<!-- this part open when click on see more detail and close when click seconde time -->
+<!-- TODO: this part will contain the tests detail and the text of the certificate with 
         background yellow on the specific string
     -->
-    <div class="more-detail more-detail{{key}}">
-        {% if result[key]["tested"]  %}
-            {% for test in  result[key]["tested"] %}
-                {% if result[key]["summary"][test] > 0 %} 
-                <div class="mb-2 font-bold d-flex align-items-center">
-                    <label class="inline-block text-1xl" for="manufactor">{{test}}:</label>
-                    {% for single_test in result[key]["tested"][test] %}
-                        <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{single_test}}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            {% endfor %}
-            <div class="text trian">
-                <div class="border rounded border-indigo-800 focus:outline-none p-5 w-full overflow-y-scroll max-h-80" name="certificate_text" id="certificate_text">
-                    {{result[key]["text"] | safe}}
-                </div>
-            </div>
-        {% endif %}
+<div class="more-detail more-detail{{key}}">
+    {% if result[key]["tested"] %}
+    {% for test in result[key]["tested"] %}
+    {% if result[key]["summary"][test] > 0 %}
+    <div class="mb-2 font-bold d-flex align-items-center">
+        <label class="inline-block text-1xl" for="manufactor">{{test}}:</label>
+        {% for single_test in result[key]["tested"][test] %}
+        <p id="manufactor" class="inline-block font-normal mb-0 ms-3">{{single_test}}</p>
+        {% endfor %}
     </div>
+    {% endif %}
+    {% endfor %}
+    <div class="text trian">
+        <div class="border rounded border-indigo-800 focus:outline-none p-5 w-full overflow-y-scroll max-h-80"
+            name="certificate_text" id="certificate_text">
+            {{result[key]["text"] | safe}}
+        </div>
+    </div>
+    {% endif %}
+</div>
 
-    <br><hr class="border-black"><br>
+<br>
+<hr class="border-black"><br>
 {% endfor %}
 
-<form action="/send_report" method="POST" enctype="multipart/form-data" class="register-form w-3/4 lg:w-1/2">
+<form action="/generate-pdf" method="POST" enctype="multipart/form-data" class="register-form w-3/4 lg:w-1/2">
     <!-- {% if certificate_type %}
         <input type="hidden" name="certificate_type" value="{{certificate_type}}">
     {% endif %}
@@ -121,11 +132,14 @@
     <!-- the hole result -->
     <input type="hidden" name="result" value="{{result}}">
 
-    <div class="item mb-5">
+    <!-- <div class="item mb-5">
         <label for="email" class="model-name mb-2 block text-1xl">Email Receiver:</label>
         <input type="text" name="email" id="email" class="my-input" placeholder="Email Receiver">
-    </div>
-    <input type="submit" value="Send Report" class="file-label" id="send_report">
+    </div> -->
+    <input style="width: 150px; display: inline-block;" type="submit" value="Download Result" class="file-label"
+        id="send_report">
 </form>
+
+<a href="/" style="width: 150px; display: inline-block;" class="file-label mt-2">Go to Home Page</a>
 
 {% endblock %}

@@ -6,6 +6,7 @@ import sys
 import concurrent.futures
 import re
 import spacy
+from Crypto.Cipher import AES
 
 
 def from_images_to_text(pages):

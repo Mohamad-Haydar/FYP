@@ -1,3 +1,5 @@
+from Crypto.Cipher import AES
+
 def extract_var(sentence):
     variables = []
     number = ""

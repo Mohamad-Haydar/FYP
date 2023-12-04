@@ -10,6 +10,7 @@ from flask import (
     flash,
     jsonify,
     make_response,
+    send_file
 )
 from datetime import timedelta, datetime
 from functools import wraps
@@ -38,6 +39,7 @@ from config import DB_USER_NAME, DB_KEY, DB_URL
 import webview
 import threading
 import shutil
+import pdfkit
 
 # Initialize Celery
 app = Celery("your_app_name", broker="redis://localhost:6379/0")
@@ -293,13 +295,30 @@ def logout():
 
 @app.route("/process", methods=["POST"])
 def upload():
+
+    # to make sure that uploads folder is empty before starting the process
+    items = os.listdir("uploads")
+
+    for item in items:
+        item_path = os.path.join("uploads", item)
+        if os.path.isfile(item_path):
+            # If it's a file, remove it
+            os.remove(item_path)
+        elif os.path.isdir(item_path):
+            # If it's a directory, remove it recursively
+            shutil.rmtree(item_path)
+
     # Access the uploaded file using the Flask request object
-    # file = request.files["certificate"]
     folder = request.files.get("certificate")
     model_name = request.form.get("model_name")
     certificate_type = request.form.get("type")
 
     folder_path = os.path.join("uploads", folder.filename)
+    if(os.path.splitext(folder_path)[1] != ".zip"):
+        return render_template(
+            "error.html",
+            data="Sorry, you need to enter a zip file to make the process!!!!"
+        )
     folder.save(folder_path)
 
     # Extract the uploaded zip file
@@ -309,81 +328,61 @@ def upload():
     # Optionally, you can remove the uploaded zip file
     os.remove(folder_path)
 
-    folder_path = os.path.dirname(os.path.realpath(__file__)) + "\\" + os.path.splitext(folder_path)[0]
+    folder_path = "uploads"
+
+    # folder_path = os.path.splitext(folder_path)[0]
     result = process_folder(folder_path, model_name, certificate_type)
 
-    shutil.rmtree(folder_path)
+    items = os.listdir(folder_path)
 
+    for item in items:
+        item_path = os.path.join(folder_path, item)
+        if os.path.isfile(item_path):
+            # If it's a file, remove it
+            os.remove(item_path)
+        elif os.path.isdir(item_path):
+            # If it's a directory, remove it recursively
+            shutil.rmtree(item_path)
+
+    count = 0
+    for key in result:
+        for test in result[key]["tested"]:
+            if result[key]["summary"][test] > 0:
+                count += 1
     return render_template(
         "results.html",
         result=result,
         current_route=request.path,
         certificate_type=certificate_type,
+        count=count
     )
 
-# @app.route("/process", methods=["POST"])
-# def upload():
-#     # Access the uploaded file using the Flask request object
-#     # file = request.files["certificate"]
-#     folder = request.files.get("certificate")
-#     model_name = request.form.get("model_name")
-#     certificate_type = request.form.get("type")
-#     result = {}
-#     counter = 0
+@app.route('/generate-pdf',  methods=["POST"])
+def generate_pdf():
+    # Get the "result" data from the submitted form
+    result_data =  eval(request.form.get('result'))
+    # Render the generate-pdf.html template with the "result" data
+    count = 0
+    for key in result_data:
+        for test in result_data[key]["tested"]:
+            if result_data[key]["summary"][test] > 0:
+                count += 1
+        
 
-#     folder_path = os.path.join("uploads", folder.filename)
-#     foldername = os.path.splitext(folder_path)[0]
-#     folder.save(folder_path)
+    rendered_html = render_template('generate-pdf.html', result=result_data, count=count)
 
-#     # Extract the uploaded zip file
-#     with zipfile.ZipFile(folder_path, "r") as zip_ref:
-#         zip_ref.extractall("uploads")
+    # Generate PDF using the "result" data
+    if os.name == 'posix':  # 'posix' represents Linux/Unix-based systems
+        wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+    elif os.name == 'nt':  # 'nt' represents Windows
+        wkhtmltopdf_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
 
-#     # Optionally, you can remove the uploaded zip file
-#     os.remove(folder_path)
+    name = "Compliance Result for " + result_data[0]["user_input"] + ".pdf"
+    pdfkit.from_string(rendered_html, name,configuration=config)
 
-#     folder_path = os.path.dirname(os.path.realpath(__file__)) + "\\" + foldername
-#     for root, dirs, files in os.walk(foldername):
-#         for file_path in files:
-#             # print(folder_path + "\\" + file_path)
-#             # Call the process_pdf() function from pdf_processor module
-#             (
-#                 data,
-#                 user_input,
-#                 model,
-#                 range,
-#                 manufactor,
-#                 tested,
-#                 summary,
-#                 case,
-#                 text,
-#             ) = pdf_processor.process_pdf(
-#                 folder_path + "\\" + file_path,
-#                 model_name,
-#                 certificate_type,
-#             )
-#             result[counter] = {
-#                 "file_name": file_path,
-#                 "data": data,
-#                 "user_input": user_input,
-#                 "model": model,
-#                 "range": range,
-#                 "manufactor": manufactor,
-#                 "tested": tested,
-#                 "summary": summary,
-#                 "case": case,
-#                 "text": text,
-#             }
-#             counter += 1
-
-#     shutil.rmtree(folder_path)
-#     return render_template(
-#         "results.html",
-#         result=result,
-#         current_route=request.path,
-#         certificate_type=certificate_type,
-#     )
-
+    # Download the PDF
+    return send_file(name, as_attachment=True)
 
 @app.route("/send_report", methods=["POST"])
 def send_report():

@@ -21,6 +21,8 @@ double click and Follow the installation process
 
 9- Do the same as you did in steps 4,5 and 6 with this new path
 
+10- download from this link: https://wkhtmltopdf.org/downloads.html
+
 ************************************************************
 ******************    Run The Application ******************
 
